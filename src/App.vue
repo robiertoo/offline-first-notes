@@ -26,10 +26,26 @@
         <div v-if="activeNote">
           <editor-content :editor="editor" />
         </div>
+
+        <div v-else class="flex flex-col flex-grow px-4 pt-3 pb-4">
+          <div v-for="note in notes" :key="note.created">
+            <div class="prose my-2 mx-auto">
+              <div class="flex flex-col flex-grow mx-auto">
+                <span class="text-muted text-sm">Created on {{ new Date(note.created).toLocaleString() }}</span>
+              </div>
+            
+              <div v-html="note.content"></div>
+            </div>
+
+            <hr class="w-full">
+          </div>
+        </div>
       </div>
 
-      <div class="h-16 bg-gray-100 border-t border-gray-300 text-right" @click="saveNote">
-        Save Note
+      <div class="h-16 bg-gray-100 border-t border-gray-300 text-right" v-if="activeNote">
+        <button @click.prevent="saveNote" class="save-button">
+          Save Note
+        </button>
       </div>
     </div>
   </div>
@@ -64,7 +80,7 @@ export default {
       ],
       editorProps: {
         attributes: {
-          class: "prose my-6 mx-auto focus:outline-none border border-red-400"
+          class: "prose my-6 mx-auto focus:outline-none border-b border-grey-400"
         }
       }
     })
@@ -170,4 +186,11 @@ export default {
 </script>
 
 <style>
+.save-button {
+  @apply bg-gray-700 text-white px-4 py-2 rounded;
+}
+
+.save-button:hover {
+  @apply bg-gray-600;
+}
 </style>
