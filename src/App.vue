@@ -1,5 +1,11 @@
 <template>
   <div class="flex w-screen h-screen text-gray-700">
+    <div v-if="isOffline" class="w-screen absolute bg-orange-200 text-center py-1">
+      Sorry, it looks like your internet is down!
+
+      {{ isOffline }}
+    </div>
+
     <div class="flex flex-col flex-shrink-0 w-64 border-r border-gray-300 bg-gray-100">
       <!-- sidebar -->
       <div class="h-0 overflow-auto flex-grow">
@@ -66,6 +72,7 @@ export default {
       database: null,
       notes: [],
       activeNote: null,
+      isOffline: ! navigator.onLine,
     };
   },
   async created() {
@@ -83,6 +90,16 @@ export default {
           class: "prose my-6 mx-auto focus:outline-none border-b border-grey-400"
         }
       }
+    })
+
+    window.addEventListener('offline', () => {
+      this.isOffline = true;
+    })
+
+    window.addEventListener('online', () => {
+      this.isOffline = false;
+
+      this.syncUserData();
     })
   },
   beforeUnmount() {
@@ -181,6 +198,11 @@ export default {
       })      
     
     },  
+    syncUserData() {
+      if (this.ifOffline) return;
+
+
+    }
   }
 } 
 </script>
